@@ -23,6 +23,12 @@ return new class extends Migration
         $table->string('payment_method')->nullable();
         $table->text('notes')->nullable();
         $table->timestamps();
+        $table->string('shipping_courier')->nullable()->after('payment_method');
+        $table->string('shipping_service')->nullable()->after('shipping_courier');
+        $table->decimal('shipping_cost', 10, 2)->default(0)->after('shipping_service');
+        $table->string('city')->nullable()->after('shipping_address');
+        $table->string('province')->nullable()->after('city');
+        $table->string('postal_code')->nullable()->after('province');
     });
 }
 

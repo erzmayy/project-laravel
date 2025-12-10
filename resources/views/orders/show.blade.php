@@ -124,6 +124,32 @@
                 @endif
             </div>
         @endif
+                <!-- Payment Confirmation Button - TAMBAHKAN INI -->
+        @if($order->status == 'pending' && $order->payment_method == 'bank_transfer')
+            @if(!$order->paymentConfirmation)
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+                    <h3 class="font-bold text-yellow-900 mb-2">Sudah Transfer?</h3>
+                    <p class="text-sm text-yellow-800 mb-4">Upload bukti transfer untuk mempercepat verifikasi pembayaran</p>
+                    <a href="{{ route('payment.create', $order) }}" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 font-semibold">
+                        📤 Upload Bukti Transfer
+                    </a>
+                </div>
+            @else
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                    <h3 class="font-bold text-blue-900 mb-2">Bukti Transfer Sudah Diupload</h3>
+                    <p class="text-sm text-blue-800 mb-2">Status: 
+                        <span class="font-semibold">
+                            @if($order->paymentConfirmation->status == 'pending') Menunggu Verifikasi Admin @endif
+                            @if($order->paymentConfirmation->status == 'approved') ✓ Disetujui @endif
+                            @if($order->paymentConfirmation->status == 'rejected') ✗ Ditolak @endif
+                        </span>
+                    </p>
+                    <a href="{{ route('payment.show', $order) }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                        Lihat Detail Pembayaran →
+                    </a>
+                </div>
+            @endif
+        @endif
 
         <!-- Action Buttons -->
         <div class="flex space-x-3">

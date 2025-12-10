@@ -74,6 +74,74 @@
             </table>
         </div>
 
+        @if($order->shipping)
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-xl font-bold mb-4">Informasi Pengiriman</h3>
+        
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+                <p class="text-sm text-gray-500">Kurir</p>
+                <p class="font-semibold">{{ $order->shipping->courier }} - {{ $order->shipping->service }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Ongkir</p>
+                <p class="font-semibold">Rp {{ number_format($order->shipping->cost, 0, ',', '.') }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Nomor Resi</p>
+                <p class="font-semibold">{{ $order->shipping->tracking_number ?: '-' }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Status Pengiriman</p>
+                <span class="px-2 py-1 text-xs rounded-full
+                    {{ $order->shipping->status == 'delivered' ? 'bg-green-100 text-green-800' : '' }}
+                    {{ $order->shipping->status == 'in_transit' ? 'bg-blue-100 text-blue-800' : '' }}
+                    {{ $order->shipping->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}">
+                    {{ ucfirst($order->shipping->status) }}
+                </span>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('admin.shipping.update', $order->shipping) }}" class="border-t pt-4">
+            @csrf
+            @method('PUT')
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Update Status</label>
+                    <select name="status" class="w-full rounded-md border-gray-300">
+                        <option value="pending" {{ $order->shipping->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="picked_up" {{ $order->shipping->status == 'picked_up' ? 'selected' : '' }}>Picked Up</option>
+                        <option value="in_transit" {{ $order->shipping->status == 'in_transit' ? 'selected' : '' }}>In Transit</option>
+                        <option value="delivered" {{ $order->shipping->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                        <option value="returned" {{ $order->shipping->status == 'returned' ? 'selected' : '' }}>Returned</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Resi</label>
+                    <input type="text" name="tracking_number" value="{{ $order->shipping->tracking_number }}" class="w-full rounded-md border-gray-300">
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Pengiriman</label>
+                    <textarea name="delivery_notes" rows="2" class="w-full rounded-md border-gray-300">{{ $order->shipping->delivery_notes }}</textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                Update Shipping
+            </button>
+        </form>
+    </div>
+@else
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h3 class="text-xl font-bold mb-4">Pengiriman</h3>
+        <p class="text-gray-600 mb-4">Belum ada informasi pengiriman untuk order ini</p>
+        <a href="{{ route('admin.shipping.create', $order) }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+            Buat Shipping
+        </a>
+    </div>
+@endif
+
         <div class="bg-white rounded-lg shadow-md p-6">
             <h3 class="text-xl font-bold mb-4">Alamat Pengiriman</h3>
             <p class="font-semibold">{{ $order->shipping_name }}</p>

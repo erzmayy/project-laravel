@@ -26,10 +26,20 @@
                 <a href="{{ route('admin.orders.index') }}" class="block px-4 py-3 hover:bg-gray-700 {{ request()->routeIs('admin.orders.*') ? 'bg-gray-700' : '' }}">
                     Pesanan
                 </a>
+                <a href="{{ route('admin.payments.index') }}" class="block px-4 py-3 hover:bg-gray-700">Konfirmasi Pembayaran</a>
+
+                 <a href="{{ route('admin.reports.index') }}" class="block px-4 py-3 hover:bg-gray-700"> Laporan</a>
                 <a href="{{ route('home') }}" class="block px-4 py-3 hover:bg-gray-700">
                     Ke Website
                 </a>
+
+                 @if(Auth::user()->isSuperAdmin())
+                    <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 hover:bg-gray-700">👥 User Management</a>
+                @endif
+                          
             </nav>
+                
+                
         </div>
 
         <!-- Main Content -->

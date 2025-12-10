@@ -53,4 +53,38 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    // Tambahkan di class User
+
+    /**
+     * Check if user is super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if user is any type of admin (admin or super_admin)
+     */
+    public function isAnyAdmin(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    /**
+     * Scope query untuk filter by role
+     */
+    public function scopeRole($query, $role)
+    {
+        return $query->where('role', $role);
+    }
+
+    /**
+     * Scope query untuk admin & super admin
+     */
+    public function scopeAdmins($query)
+    {
+        return $query->whereIn('role', ['admin', 'super_admin']);
+    }
 }

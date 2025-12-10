@@ -28,4 +28,15 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function shipping()
+    {
+        return $this->hasOne(Shipping::class);
+    }
+
+    // Tambahkan di bagian relationships
+    public function paymentConfirmation()
+    {
+        return $this->hasOne(PaymentConfirmation::class);
+    }
 }

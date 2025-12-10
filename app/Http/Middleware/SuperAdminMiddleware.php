@@ -6,16 +6,15 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\User;
 
-
-class AdminMiddleware
+class SuperAdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || !Auth::user()->isAnyAdmin()) {
-            abort(403, 'Unauthorized - Admin access only');
+        if (!Auth::check() || !Auth::user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized - Super Admin access only');
         }
+        
         return $next($request);
     }
 }

@@ -33,7 +33,7 @@
                 <th class="text-left py-3">Status</th>
                 <th class="text-left py-3">Tanggal</th>
             </tr>
-        </thead>
+        </thead> 
         <tbody>
             @foreach($recentOrders as $order)
                 <tr class="border-b">
